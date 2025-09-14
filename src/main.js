@@ -4,7 +4,7 @@ import { web } from "./application/web.js";
 import cron from "node-cron";
 import { checkAndUpdateOverdueBorrows } from "./helpers/borrowHelper.js";
 
-web.listen(env.port, "::", () => {
+web.listen(env.port, () => {
     logger.info(`App start on port ${env.port}`);
 });
 
