@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      PORT: ${{ secrets.PORT }}
+      UNSPLASH_API_KEY: ${{ secrets.UNSPLASH_API_KEY }}
+      APP_NAME: ${{ secrets.APP_NAME }}
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -65,4 +68,5 @@ jobs:
           package: .
 
           
+
 
