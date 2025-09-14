@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "../generated/prisma/index.js";
 import bankSeeder from './seeders/bankSeeder.js';
 import categoriesSeeder from './seeders/categorySeeder.js';
 import userSeeder from './seeders/userSeeder.js';
