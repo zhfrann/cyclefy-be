@@ -11,9 +11,19 @@ import { fileURLToPath } from "url"
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import i18n from "i18n";
+import cors from "cors";
 
 export const web = express();
 web.use(express.json());
+
+// web.use(cors());
+web.use(cors({
+    origin: [
+        "https://cyclefy.vercel.app/",
+        "http://localhost:3000"
+    ],
+    credentials: true,
+}));
 
 web.use(session({
     secret: env.sessionSecret,
