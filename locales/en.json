@@ -91,6 +91,28 @@
         "not_found": "Category not found",
         "get_list_successful": "Get list of categories succesful"
     },
+    "notification": {
+        "not_found": "Notification not found",
+        "id_not_a_number": "Notification ID is not a number",
+        "type_invalid": "Notification type is invalid",
+        "get_all_successful": "Get all notifications successful",
+        "mark_as_read_successful": "Mark notification as read successful",
+        "donation_submitted_message": "{{item_name}} has been submitted for donation",
+        "barter_waiting_for_request_message": "{{item_name}} has been submitted and waiting for request",
+        "barter_waiting_for_confirmation_message": "{{applicant_name}} has submitted a barter request to exchange his {{applicant_item}} with your {{item_name}}, awaiting your confirmation",
+        "barter_completed_message": "The barter has been successfully completed, and the items have been exchanged",
+        "borrow_waiting_for_request_message": "{{item_name}} has been submitted and waiting for request",
+        "borrow_waiting_for_confirmation_message": "{{applicant_name}} has request to borrow your {{item_name}}, awaiting your confirmation",
+        "borrow_completed_message": "The borrowing process is complete, and the item has been successfully borrowed and returned",
+        "recycle_submitted_message": "The {{item_name}} has been submitted for recycling",
+        "repair_request_submitted_message": "The {{item_name}} has been submitted for repair request"
+    },
+    "news": {
+        "not_found": "News not found",
+        "id_not_a_number": "News ID is not a number",
+        "get_list_successful": "Get list of news successful",
+        "get_news_detail_successful": "Get news detail successful"
+    },
     "donation": {
         "not_found": "Donation not found",
         "id_not_a_number": "Donation id is not a number",

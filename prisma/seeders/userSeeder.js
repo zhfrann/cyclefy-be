@@ -41,6 +41,16 @@ export default async function userSeeder(prisma) {
             email_verified_at: new Date(),
             is_active: true,
             profile_picture: "https://ui-avatars.com/api/?name=Siti%20Aminah&background=random"
+        },
+        {
+            fullname: "Admin",
+            username: "admin",
+            email: "admin@example.com",
+            password: await bcrypt.hash("password123", 10),
+            is_email_verified: true,
+            email_verified_at: new Date(),
+            is_active: true,
+            profile_picture: "https://ui-avatars.com/api/?name=Admin&background=random"
         }
     ];
 

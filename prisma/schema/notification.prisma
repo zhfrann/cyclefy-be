@@ -1,0 +1,24 @@
+enum NotificationType {
+    donation
+    barter
+    borrow
+    recycle
+    repair
+}
+
+model Notification {
+    id           Int              @id @default(autoincrement())
+    user         User             @relation(fields: [user_id], references: [id])
+    user_id      Int
+    type         NotificationType
+    entity_id    Int
+    title        String           @db.VarChar(255)
+    message_key  String           @db.VarChar(255)
+    message_data Json
+    is_read      Boolean          @default(false)
+    redirect_to  String           @db.VarChar(255)
+    created_at   DateTime         @default(now())
+    updated_at   DateTime         @updatedAt
+
+    @@map("notifications")
+}

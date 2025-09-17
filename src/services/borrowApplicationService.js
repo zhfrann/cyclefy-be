@@ -3,6 +3,8 @@ import { addressIdOwnershipValidate, phoneIdOwnershipValidate } from "../helpers
 import { validate } from "../validations/validation.js";
 import { createBorrowApplicationValidation, extendBorrowApplicationValidation } from "../validations/borrowApplicationValidation.js";
 import { ResponseError } from "../errors/responseError.js";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
+import { createNotification } from "./notificationService.js";
 
 const createBorrowApplication = async (userId, borrowId, requestBody, reqObject) => {
     // 1. Validasi borrowId
@@ -84,6 +86,27 @@ const createBorrowApplication = async (userId, borrowId, requestBody, reqObject)
             }
         });
     }
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    const applicant = await prismaClient.user.findUnique({
+        where: { id: userId },
+        select: {
+            id: true,
+            fullname: true,
+        }
+    });
+
+    await createNotification({
+        userId: borrow.user_id,
+        type: "borrow",
+        entityId: borrow.id,
+        title: "Borrow - Waiting for Confirmation",
+        messageKey: "notification.borrow_waiting_for_confirmation_message",
+        messageData: { applicant_name: applicant.fullname, item_name: borrow.item_name },
+        redirectTo: `${protocol}://${host}/api/users/current/borrows/${borrow.id}`
+    });
 
     // 9. Response
     return {

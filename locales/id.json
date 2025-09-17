@@ -91,6 +91,28 @@
         "not_found": "Kategori tidak ditemukan",
         "get_list_successful": "Berhasil mendapatkan daftar kategori"
     },
+    "notification": {
+        "not_found": "Notifikasi tidak ditemukan",
+        "id_not_a_number": "ID notifikasi bukan angka",
+        "type_invalid": "Notification type is invalid",
+        "get_all_successful": "Berhasil mendapatkan semua notifikasi",
+        "mark_as_read_successful": "Tandai notifikasi sebagai berhasil dibaca",
+        "donation_submitted_message": "{{item_name}} telah diajukan untuk didonasikan",
+        "barter_waiting_for_request_message": "{{item_name}} telah diajukan dan menunggu untuk permintaan pengguna lain",
+        "barter_waiting_for_confirmation_message": "{{applicant_name}} telah mengajukan barter {{applicant_item}} dengan {{item_name}} milikmu, menunggu konfirmasi anda",
+        "barter_completed_message": "Barter telah berhasil diselesaikan, dan barang-barang telah ditukar",
+        "borrow_waiting_for_request_message": "{{item_name}} telah diajukan dan menunggu untuk permintaan pengguna lain",
+        "borrow_waiting_for_confirmation_message": "{{applicant_name}} telah mengajukan untuk meminjam {{item_name}} milikmu, menunggu konfirmasi anda",
+        "borrow_completed_message": "Proses peminjaman selesai, barang telah dipinjamkan dan dikembalikan",
+        "recycle_submitted_message": "Barang {{item_name}} telah diajukan untuk didaur ulang",
+        "repair_request_submitted_message": "Barang {{item_name}} telah diajukan untuk permintaan perbaikan"
+    },
+    "news": {
+        "not_found": "Berita tidak ditemukan",
+        "id_not_a_number": "ID Berita bukan angka",
+        "get_list_successful": "Berhasil mendapatkan daftar berita",
+        "get_news_detail_successful": "Berhasil mendapatkan detail berita"
+    },
     "donation": {
         "not_found": "Donasi tidak ditemukan",
         "id_not_a_number": "Donasi ID bukan angka",

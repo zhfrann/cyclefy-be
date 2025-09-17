@@ -7,6 +7,8 @@ import { ResponseError } from "../errors/responseError.js";
 import { snakeToTitleCase } from "../helpers/statusHelper.js";
 import { calculateDistance } from "../helpers/geoHelper.js";
 import { stat } from "fs";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
+import { createNotification } from "./notificationService.js";
 
 const createBorrow = async (userId, requestBody, files, reqObject) => {
     if (!files || !Array.isArray(files) || files.length === 0)
@@ -64,6 +66,19 @@ const createBorrow = async (userId, requestBody, files, reqObject) => {
             status: "waiting_for_request",
             status_detail: reqObject.__("borrow.posting.waiting_for_request_detail"),
         }
+    });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId,
+        type: "borrow",
+        entityId: borrow.id,
+        title: "Borrow - Waiting for Request",
+        messageKey: "notification.borrow_waiting_for_request_message",
+        messageData: { item_name: borrow.item_name },
+        redirectTo: `${protocol}://${host}/api/users/current/borrows/${borrow.id}`
     });
 
     return {
@@ -790,7 +805,7 @@ const markBorrowAsReturned = async (userId, borrowId) => {
     });
 };
 
-const markBorrowAsCompleted = async (userId, borrowId) => {
+const markBorrowAsCompleted = async (userId, borrowId, reqObject) => {
     // 1. Validasi borrowId milik user login
     const borrow = await prismaClient.borrow.findUnique({
         where: { id: borrowId, user_id: userId },
@@ -841,6 +856,18 @@ const markBorrowAsCompleted = async (userId, borrowId) => {
             status: "completed",
             status_detail: "borrow_application.request.completed_detail"
         }
+    });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId: borrow.user_id,
+        type: "borrow",
+        entityId: borrow.id,
+        title: "Borrow - Completed",
+        messageKey: "notification.borrow_completed_message",
+        redirectTo: `${protocol}://${host}/api/users/current/borrows/${borrow.id}`
     });
 };
 

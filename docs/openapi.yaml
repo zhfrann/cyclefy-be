@@ -18,6 +18,8 @@ tags:
     description: Dokumentasi seputar nomor kontak user
   - name: Category
     description: Dokumentasi seputar data-data category
+  - name: News
+    description: Dokumentasi seputar fitur news
   - name: Donation
     description: Dokumentasi seputar fitur donation
   - name: Barter
@@ -28,6 +30,8 @@ tags:
     description: Dokumentasi seputar fitur recycle
   - name: Repair
     description: Dokumentasi seputar fitur repair
+  - name: Notifikasi
+    description: Dokumentasi seputar fitur notifikasi
   
 
 paths:
@@ -1941,6 +1945,151 @@ paths:
                 message: Nomor telepon tidak ditemukan
                 errors: null
 
+  /api/users/current/notifications:
+    get:
+      tags:
+        - Notifikasi
+      summary: Mendapatkan daftar notifikasi user saat ini
+      description: |
+        Mendapatkan daftar notifikasi milik user yang sedang login.  
+        Mendukung filter berdasarkan tipe notifikasi (`type`) dan periode waktu (`period`), serta pagination.
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [all, donation, barter, borrow, recycle, repair]
+            default: all
+          description: "Filter berdasarkan tipe notifikasi (default: all)"
+        - in: query
+          name: period
+          schema:
+            type: string
+            enum: [today, yesterday, a week ago, a month ago]
+            default: today
+          description: "Filter berdasarkan periode waktu notifikasi (default: today)"
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: "Nomor halaman (default: 1)"
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: "Jumlah notifikasi per halaman (default: 10)"
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT token (Bearer)
+        - name: Accept-Language
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Bahasa response (en/id)
+      responses:
+        '200':
+          description: Daftar notifikasi user
+          content:
+            application/json:
+              example:
+                success: true
+                meta:
+                  total: 3
+                  page: 1
+                  size: 10
+                  totalPages: 1
+                notifications:
+                  - id: 12
+                    type: donation
+                    entity_id: 101
+                    title: "Donation - Submitted"
+                    message: "Baju Layak Pakai telah diajukan untuk didonasikan"
+                    is_read: false
+                    created_at: "2025-09-17T10:00:00.000Z"
+                    redirect_to: "https://..."
+                  - id: 11
+                    type: barter
+                    entity_id: 88
+                    title: "Barter - Confirmed"
+                    message: "Permintaan barter Anda telah dikonfirmasi"
+                    is_read: true
+                    created_at: "2025-09-16T09:00:00.000Z"
+                    redirect_to: "htts://..."
+        '401':
+          description: Tidak terautentikasi
+
+  /api/users/current/notifications/{notificationId}/read:
+    patch:
+      tags:
+        - Notifikasi
+      summary: Tandai notifikasi sebagai sudah dibaca
+      description: "Tandai notifikasi tertentu milik user saat ini sebagai sudah dibaca (`is_read: true`)"
+      parameters:
+        - in: path
+          name: notificationId
+          required: true
+          schema:
+            type: integer
+          description: ID notifikasi
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT token (Bearer)
+        - name: Accept-Language
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Bahasa response (en/id)
+      responses:
+        '200':
+          description: Notifikasi berhasil ditandai sebagai sudah dibaca
+          content:
+            application/json:
+              example:
+                success: true
+                message: "Tandai notifikasi sebagai berhasil dibaca"
+                data:
+                  count: 1
+        '404':
+          description: Notifikasi tidak ditemukan
+        '401':
+          description: Tidak terautentikasi
+        '500':
+          description: Kesalahan server internal
+        
+  /api/users/current/notifications/read-all:
+    patch:
+      tags:
+        - Notifikasi
+      summary: Tandai semua notifikasi sebagai sudah dibaca
+      description: "Tandai seluruh notifikasi milik user saat ini sebagai sudah dibaca (`is_read: true`)"
+      responses:
+        '200':
+          description: Semua notifikasi berhasil ditandai sebagai sudah dibaca
+          content:
+            application/json:
+              example:
+                success: true
+                message: "Semua notifikasi berhasil ditandai sebagai sudah dibaca"
+                data:
+                  count: 5
+        '401':
+          description: Tidak terautentikasi
+        '500':
+          description: Kesalahan server internal
+
   /api/categories:
     get:
       summary: Mendapatkan daftar category yang statusnya aktif
@@ -2025,6 +2174,137 @@ paths:
                       token:
                         type: string
                         example: null
+  
+  /api/news:
+    get:
+      tags:
+        - News
+      summary: Mendapatkan daftar berita
+      description: |
+        Mendapatkan daftar berita
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: "cari berdasarkan judul"
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            enum: [newest, oldest]
+            default: newest
+          description: "Urut berdasarkan newest atau oldest (default: newest)"
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: "Nomor halaman (default: 1)"
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: "Jumlah item per halaman (default: 10)"
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT token (Bearer)
+        - name: Accept-Language
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Bahasa response (en/id)
+      responses:
+        '200':
+          description: List of news
+          content:
+            application/json:
+              example:
+                success: true
+                meta:
+                  total: 25
+                  page: 1
+                  size: 10
+                  totalPages: 3
+                data:
+                  - id: 1
+                    title: "Community Clean Up Event"
+                    content: "Join us for a community clean up event this weekend..." # truncated
+                    created_at: "2025-09-17T10:00:00.000Z"
+                    author:
+                      id: 5
+                      fullname: "Admin"
+                      username: "admin"
+                    images:
+                      - "https://dummyimage.com/600x400/000/fff&text=news"
+                      - "https://dummyimage.com/600x400/000/fff&text=community"
+                  - id: 2
+                    title: "Donation Drive Success"
+                    content: "Thanks to your support, our donation drive was a huge success..." # truncated
+                    created_at: "2025-09-16T09:00:00.000Z"
+                    author:
+                      id: 5
+                      fullname: "Admin"
+                      username: "admin"
+                    images:
+                      - "https://dummyimage.com/600x400/000/fff&text=charity"
+
+  /api/news/{newsId}:
+    get:
+      tags:
+        - News
+      summary: Mendapatkan detail berita
+      description: Mendapatkan detail berita
+      parameters:
+        - in: path
+          name: newsId
+          required: true
+          schema:
+            type: integer
+          description: News ID
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT token (Bearer)
+        - name: Accept-Language
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Bahasa response (en/id)
+      responses:
+        '200':
+          description: News detail
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  id: 1
+                  title: "Community Clean Up Event"
+                  content: "Join us for a community clean up event this weekend at the city park. Let's make our environment cleaner together!"
+                  created_at: "2025-09-17T10:00:00.000Z"
+                  author:
+                    id: 5
+                    fullname: "Admin"
+                    username: "admin"
+                  images:
+                    - "https://dummyimage.com/600x400/000/fff&text=news"
+                    - "https://dummyimage.com/600x400/000/fff&text=community"
+        '400':
+          description: Id berita bukan angka
+        '404':
+          description: Berita tidak ditemukan
   
   /api/users/current/donations:
     get:

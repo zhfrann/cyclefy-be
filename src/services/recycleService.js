@@ -2,10 +2,12 @@ import { prismaClient } from "../application/database.js";
 import { ResponseError } from "../errors/responseError.js";
 import { getPictureUrl } from "../helpers/fileHelper.js";
 import { calculateDistance } from "../helpers/geoHelper.js";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
 import { snakeToTitleCase } from "../helpers/statusHelper.js";
 import { addressIdOwnershipValidate, isCategoryIdValid, phoneIdOwnershipValidate } from "../helpers/userHelper.js";
 import { createRecycleValidation } from "../validations/recycleValidation.js";
 import { validate } from "../validations/validation.js";
+import { createNotification } from "./notificationService.js";
 
 const getRecycleLocations = async (userId, search, category, maxDistance, location, sortBy, size, page, reqObject) => {
     // 1. Ambil semua address user login
@@ -197,6 +199,19 @@ const createRecycle = async (userId, requestBody, files, reqObject) => {
             status_detail: "recycle.post.submitted_detail",
             // updated_by: userId
         }
+    });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId,
+        type: "recycle",
+        entityId: recycle.id,
+        title: "Recycle - Submitted",
+        messageKey: "notification.recycle_submitted_message",
+        messageData: { item_name: recycle.item_name },
+        redirectTo: `${protocol}://${host}/api/users/current/recycles/${recycle.id}`
     });
 
     return {

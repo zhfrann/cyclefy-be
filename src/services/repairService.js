@@ -9,6 +9,8 @@ import { snap } from "../application/midtrans.js";
 import { env } from "../application/env.js";
 import axios from "axios";
 import { wibToUtc } from "../helpers/dateHelper.js";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
+import { createNotification } from "./notificationService.js";
 
 const getRepairPrice = async (categoryId) => {
     const repairPrices = await prismaClient.repairPrice.findUnique({
@@ -129,6 +131,19 @@ const createRepair = async (userId, requestBody, files, reqObject) => {
         include: {
             user: true
         }
+    });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId,
+        type: "repair",
+        entityId: repair.id,
+        title: "Repair - Request Submitted",
+        messageKey: "notification.repair_request_submitted_message",
+        messageData: { item_name: repair.item_name },
+        redirectTo: `${protocol}://${host}/api/users/current/repairs/${repair.id}`
     });
 
     // 9. Mapping response

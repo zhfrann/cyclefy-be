@@ -6,6 +6,8 @@ import { getPictureUrl } from "../helpers/fileHelper.js";
 import { ResponseError } from "../errors/responseError.js";
 import { calculateDistance } from "../helpers/geoHelper.js";
 import { snakeToTitleCase } from "../helpers/statusHelper.js";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
+import { createNotification } from "./notificationService.js";
 
 const getBarters = async (userId, search, category, maxDistance, location, sort, page, size, reqObject) => {
     // Get all current user addresses
@@ -263,6 +265,22 @@ const createBarter = async (userId, requestBody, files, reqObject) => {
             // updated_by: userId
         }
     });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId,
+        type: "barter",
+        entityId: barter.id,
+        title: "Barter - Waiting for Request",
+        messageKey: "notification.barter_waiting_for_request_message",
+        messageData: { item_name: barter.item_name },
+        // message: `${donation.item_name} has been submitted for donation`,
+        // message: req.__('notification.donation_submitted_message', { item_name: donation.item_name }),
+        redirectTo: `${protocol}://${host}/api/users/current/barters/${barter.id}`
+    });
+
 
     return {
         id: barter.id,
@@ -816,7 +834,7 @@ const processIncomingRequest = async (userId, barterId, requestId, action, decli
     }
 };
 
-const markBarterAsCompleted = async (userId, barterId) => {
+const markBarterAsCompleted = async (userId, barterId, reqObject) => {
     // 1. Validasi barterId milik user login
     const barter = await prismaClient.barter.findUnique({
         where: { id: barterId, user_id: userId },
@@ -866,6 +884,18 @@ const markBarterAsCompleted = async (userId, barterId) => {
             status: "completed",
             status_detail: "barter_application.request.completed_detail"
         }
+    });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId: barter.user_id,
+        type: "barter",
+        entityId: barter.id,
+        title: "Barter - Completed",
+        messageKey: "notification.barter_completed_message",
+        redirectTo: `${protocol}://${host}/api/users/current/barters/${barter.id}`
     });
 };
 

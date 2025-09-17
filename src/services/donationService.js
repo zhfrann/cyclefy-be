@@ -7,6 +7,8 @@ import fs from "fs/promises";
 import { addressIdOwnershipValidate, isCategoryIdValid, phoneIdOwnershipValidate } from "../helpers/userHelper.js";
 import { getPictureUrl } from "../helpers/fileHelper.js";
 import { snakeToTitleCase } from "../helpers/statusHelper.js";
+import { createNotification } from "./notificationService.js";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
 
 const createDonation = async (userId, requestBody, files, reqObject) => {
     if (!files || !Array.isArray(files) || files.length === 0)
@@ -59,6 +61,19 @@ const createDonation = async (userId, requestBody, files, reqObject) => {
             status_detail: "donation.submitted_detail",
             updated_by: userId
         }
+    });
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    await createNotification({
+        userId,
+        type: "donation",
+        entityId: donation.id,
+        title: "Donation - Submitted",
+        messageKey: "notification.donation_submitted_message",
+        messageData: { item_name: donation.item_name },
+        redirectTo: `${protocol}://${host}/api/users/current/donations/${donation.id}`
     });
 
     return {

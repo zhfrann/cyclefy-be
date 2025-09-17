@@ -8,6 +8,8 @@ import { snakeToTitleCase } from "../helpers/statusHelper.js";
 import { calculateDistance } from "../helpers/geoHelper.js";
 import { logger } from "../application/logging.js";
 import fs from "fs/promises";
+import { getHost, getProtocol } from "../helpers/httpHelper.js";
+import { createNotification } from "./notificationService.js";
 
 const createBarterApplication = async (userId, barterId, requestBody, files, reqObject) => {
     // Validate barterId (must be other users' post)
@@ -158,6 +160,27 @@ const createBarterApplication = async (userId, barterId, requestBody, files, req
             }
         });
     }
+
+    const host = getHost(reqObject);
+    const protocol = getProtocol(reqObject);
+
+    const applicant = await prismaClient.user.findUnique({
+        where: { id: userId },
+        select: {
+            id: true,
+            fullname: true,
+        }
+    });
+
+    await createNotification({
+        userId: barter.user_id,
+        type: "barter",
+        entityId: barter.id,
+        title: "Barter - Waiting for Confirmation",
+        messageKey: "notification.barter_waiting_for_confirmation_message",
+        messageData: { applicant_name: applicant.fullname, applicant_item: applicationData.item_name, item_name: barter.item_name },
+        redirectTo: `${protocol}://${host}/api/users/current/barters/${barter.id}`
+    });
 
     return {
         id: barterApplication.id,
