@@ -96,8 +96,8 @@ const getBarters = async (userId, search, category, maxDistance, location, sort,
                 (!img.image_path.startsWith("http") && !img.image_path.startsWith("https"))
                     ? getPictureUrl(reqObject, img.image_path)
                     : img.image_path),
-            // created_at: barter.created_at,
-            // updated_at: barter.updated_at
+            created_at: barter.created_at,
+            updated_at: barter.updated_at
         }
     });
 

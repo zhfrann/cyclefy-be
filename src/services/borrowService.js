@@ -209,6 +209,8 @@ const getBorrows = async (
         duration_from: borrow.duration_from,
         duration_to: borrow.duration_to,
         borrowing_duration: (borrow.duration_to - borrow.duration_from) / (1000 * 60 * 60 * 24) + 1,
+        created_at: borrow.created_at,
+        updated_at: borrow.updated_at
     }));
 
     // 8. Sorting
