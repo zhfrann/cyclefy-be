@@ -77,11 +77,11 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Run Prisma Seed
-        run: |
-          npx prisma db seed
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      # - name: Run Prisma Seed
+      #   run: |
+      #     npx prisma db seed
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -92,6 +92,7 @@ jobs:
           package: .
 
           
+
 
 
 
