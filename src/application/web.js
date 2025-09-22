@@ -19,7 +19,7 @@ web.use(express.json());
 // web.use(cors());
 web.use(cors({
     origin: [
-        "https://cyclefy.vercel.app/",
+        "https://cyclefy.vercel.app",
         "http://localhost:3000"
     ],
     credentials: true,
