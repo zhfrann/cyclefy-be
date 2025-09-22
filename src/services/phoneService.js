@@ -73,9 +73,19 @@ const deletePhone = async (userId, phoneId) => {
     });
     if (!phone) throw new ResponseError(404, 'phone.not_found');
 
-    return await prismaClient.phone.delete({
-        where: { id: phoneId }
-    });
+    try {
+        return await prismaClient.phone.delete({
+            where: { id: phoneId }
+        });
+    } catch (error) {
+        if (error.code === "P2003") {
+            throw new ResponseError(
+                400,
+                "phone.delete_failed_referenced"
+            );
+        }
+        throw new ResponseError(500, 'common.internal_server_error');
+    }
 }
 
 export default {

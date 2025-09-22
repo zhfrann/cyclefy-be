@@ -92,9 +92,19 @@ const deleteAddress = async (userId, addressId) => {
     });
     if (!address) throw new ResponseError(404, "address.not_found");
 
-    return await prismaClient.address.delete({
-        where: { id: addressId }
-    });
+    try {
+        return await prismaClient.address.delete({
+            where: { id: addressId }
+        });
+    } catch (error) {
+        if (error.code === "P2003") {
+            throw new ResponseError(
+                400,
+                "address.delete_failed_referenced"
+            );
+        }
+        throw new ResponseError(500, 'common.internal_server_error');
+    }
 }
 
 export default {

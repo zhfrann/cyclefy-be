@@ -61,6 +61,7 @@
     },
     "address": {
         "id_not_a_number": "Address id is not a number",
+        "delete_failed_referenced": "You cannot delete this address because it is still being used in ongoing activities",
         "not_found": "Address not found",
         "update_successful": "Update address for current user successful",
         "geocode_not_found": "No address data found",
@@ -72,6 +73,7 @@
     },
     "phone": {
         "id_not_a_number": "Phone id is not a number",
+        "delete_failed_referenced": "You cannot delete this phone because it is still being used in ongoing activities",
         "not_found": "Phone not found",
         "duplicate": "Phone number duplicate",
         "get_list_successful": "Get phone list successful",

@@ -61,6 +61,7 @@
     },
     "address": {
         "id_not_a_number": "Address id bukan angka",
+        "delete_failed_referenced": "Anda tidak dapat menghapus alamat ini karena masih digunakan dalam aktivitas yang sedang berlangsung",
         "not_found": "Alamat tidak ditemukan",
         "update_successful": "Berhasil memperbarui alamat pengguna saat ini",
         "geocode_not_found": "Data alamat tidak ditemukan",
@@ -72,6 +73,7 @@
     },
     "phone": {
         "id_not_a_number": "Phone id bukan angka",
+        "delete_failed_referenced": "Anda tidak dapat menghapus nomor handphone ini karena masih digunakan dalam aktivitas yang sedang berlangsung",
         "not_found": "Nomor telepon tidak ditemukan",
         "duplicate": "Nomor telepon sudah ditambahkan",
         "get_list_successful": "Berhasil mendapatkan daftar nomor telepon",
