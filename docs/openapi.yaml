@@ -328,7 +328,7 @@ paths:
                   success: { type: boolean, example: false }
                   message: { type: string, example: "Email not found" }
 
-  /api/verify-reset-password-otp:
+  /api/verify-reset-password-email:
     post:
       summary: Verifikasi OTP untuk Reset Password
       description: |
@@ -5340,7 +5340,7 @@ paths:
           required: false
           schema:
             type: string
-            example: my_items,other_requests
+            example: my_items,other_items
         - name: userItemPage
           in: query
           description: "Halaman data borrow milik user (default: 1)"

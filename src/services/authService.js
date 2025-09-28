@@ -240,7 +240,7 @@ const verifyResetPasswordOTP = async (requestBody, reqObject) => {
     });
     if (!userData) throw new ResponseError(404, "user.not_found");
 
-    const resetPasswordData = await prismaClient.passwordReset.findUnique({
+    const resetPasswordData = await prismaClient.passwordReset.findFirst({
         where: {
             user_id: userData.id,
             otp: data.otp
