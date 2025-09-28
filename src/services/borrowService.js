@@ -123,6 +123,7 @@ const getBorrows = async (
             { address: { address: { contains: location } } },
         ];
     }
+    where.duration_from = { gte: new Date() };
 
     // 3. Query all borrows
     const borrows = await prismaClient.borrow.findMany({
@@ -426,7 +427,7 @@ const getMyBorrowDetail = async (userId, borrowId, reqObject) => {
 
             statusDetail = reqObject.__(status.status_detail, { date: extendedDate });
         } else {
-            reqObject.__(status.status_detail)
+            statusDetail = reqObject.__(status.status_detail)
         }
 
         return {

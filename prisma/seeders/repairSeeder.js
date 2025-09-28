@@ -84,14 +84,14 @@ export async function repairSeeder(prisma, users, categories, addresses, phones)
                     repair_id: repair.id,
                     status: statusPath[j],
                     status_detail: statusPath[j] === "request_submitted"
-                        ? "repair.post.request_submitted_detail"
+                        ? "repair.status.request_submitted_detail"
                         : statusPath[j] === "confirmed"
-                            ? "repair.post.confirmed_detail"
+                            ? "repair.status.confirmed_detail"
                             : statusPath[j] === "under_repair"
-                                ? "repair.post.under_repair_detail"
+                                ? "repair.status.under_repair_detail"
                                 : statusPath[j] === "completed"
-                                    ? "repair.post.completed_detail"
-                                    : "repair.post.failed_detail",
+                                    ? "repair.status.completed_detail"
+                                    : "repair.status.failed_detail",
                     updated_by: user.id
                 }
             });

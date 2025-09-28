@@ -71,7 +71,7 @@ const createBorrowApplication = async (userId, borrowId, requestBody, reqObject)
         data: {
             borrow_application_id: borrowApp.id,
             status: "request_submitted",
-            status_detail: "borrow_application.request_submitted_detail"
+            status_detail: "borrow_application.request.request_submitted_detail"
         }
     });
 
