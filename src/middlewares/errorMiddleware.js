@@ -7,6 +7,7 @@ export const errorMiddleware = (err, req, res, next) => {
         return;
     }
 
+    // logger.error(`status: ${err}`)
     const status = err.status && Number.isInteger(err.status) ? err.status : 500;
 
     if (err instanceof ResponseError) {

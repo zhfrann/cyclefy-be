@@ -11,6 +11,7 @@ import axios from "axios";
 import { wibToUtc } from "../helpers/dateHelper.js";
 import { getHost, getProtocol } from "../helpers/httpHelper.js";
 import { createNotification } from "./notificationService.js";
+import { logger } from "../application/logging.js";
 
 const getRepairPrice = async (categoryId) => {
     const repairPrices = await prismaClient.repairPrice.findUnique({
@@ -446,6 +447,13 @@ const requestRepairPayment = async (userId, repairId, paymentType, options = {})
         { auth: midtransAuth }
     ).then(res => res.data);
 
+    logger.info("midtrans_res:");
+    console.log(midtransRes);
+
+    if (midtransRes.status_code != 201) {
+        throw new ResponseError(midtransRes.status_code, `${midtransRes.status_message} (Response from midtrans)`)
+    }
+
     // 4. Simpan instruksi pembayaran ke DB
     let updateData = { status: "pending" };
     let responseData = {
@@ -497,6 +505,9 @@ const requestRepairPayment = async (userId, repairId, paymentType, options = {})
         responseData.deeplink_url = exists.deeplink_url || updateData.deeplink_url;
         responseData.expiry = exists.expired_at || midtransRes.expiry_time;
     }
+
+    // console.log(responseData);
+    // return responseData;
 
     await prismaClient.repairPayment.update({
         where: { id: payment.id },
